@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindWell NG - Smart Mental Health Assessment System</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css?v=2">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <div class="bg-pattern"></div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="logo-container" onclick="location.reload()">
+            <div class="logo">
+                <svg viewBox="0 0 24 24" fill="none">
+                    <path
+                        d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20Z"
+                        fill="currentColor" />
+                    <path
+                        d="M12 6C8.69 6 6 8.69 6 12C6 15.31 8.69 18 12 18C15.31 18 18 15.31 18 12C18 8.69 15.31 6 12 6ZM12 16C9.79 16 8 14.21 8 12C8 9.79 9.79 8 12 8C14.21 8 16 9.79 16 12C16 14.21 14.21 16 12 16Z"
+                        fill="currentColor" />
+                </svg>
+            </div>
+            <span class="logo-text" id="logoText">MindWell NG</span>
+        </div>
+
+        <!-- User Info -->
+        <div class="user-info" id="userInfo" style="display: none;">
+            <span class="welcome-text" id="welcomeUser"></span>
+            <button class="logout-btn" id="logoutBtn">Logout</button>
+        </div>
+
+        <!-- Language Selector -->
+        <div class="lang-selector" id="langSelector">
+            <button class="lang-button" id="langButton">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="2" y1="12" x2="22" y2="12" />
+                    <path
+                        d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                </svg>
+                <span id="selectedLang">English</span>
+                <svg class="chevron" id="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    width="14" height="14">
+                    <polyline points="6 9 12 15 18 9" />
+                </svg>
+            </button>
+
+            <div class="lang-dropdown" id="langDropdown">
+                <button class="lang-option active" data-lang="en">English</button>
+                <button class="lang-option" data-lang="pidgin">Pidgin</button>
+                <button class="lang-option" data-lang="yoruba">Yoruba</button>
+                <button class="lang-option" data-lang="igbo">Igbo</button>
+                <button class="lang-option" data-lang="hausa">Hausa</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <div class="nav-tabs" id="navTabs" style="display: none;">
+        <button class="nav-tab" data-tab="dashboard" id="tabDashboard">Dashboard</button>
+        <button class="nav-tab" data-tab="screening" id="tabScreening">Screening</button>
+        <button class="nav-tab" data-tab="resources" id="tabResources">Resources</button>
+        <button class="nav-tab" data-tab="education" id="tabEducation">Learn</button>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        <!-- AUTH SECTION -->
+        <div id="authSection" class="container">
+            <div class="auth-card">
+                <div class="auth-tabs">
+                    <button class="auth-tab active" id="loginTab">Login</button>
+                    <button class="auth-tab" id="signupTab">Sign Up</button>
+                </div>
+
+                <!-- Login Form -->
+                <form id="loginForm" class="auth-form">
+                    <h2 class="auth-title" id="loginTitle">Welcome Back</h2>
+                    <p class="auth-subtitle" id="loginSubtitle">Sign in to continue your journey</p>
+
+                    <div class="form-group">
+                        <label for="loginUsername" id="loginUsernameLabel">Username</label>
+                        <input type="text" id="loginUsername" class="auth-input" placeholder="Enter username" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="loginPassword" id="loginPasswordLabel">Password</label>
+                        <input type="password" id="loginPassword" class="auth-input" placeholder="Enter password"
+                            required>
+                    </div>
+
+                    <div class="privacy-note" id="loginPrivacyNote">
+                        <small>🔒 No credentials stored. Any username/password works.</small>
+                    </div>
+
+                    <button type="button" class="auth-btn" id="loginBtn">Login</button>
+                </form>
+
+                <!-- Signup Form -->
+                <form id="signupForm" class="auth-form hidden">
+                    <h2 class="auth-title" id="signupTitle">Create Account</h2>
+                    <p class="auth-subtitle" id="signupSubtitle">Start your mental wellness journey</p>
+
+                    <div class="form-group">
+                        <label for="signupUsername" id="signupUsernameLabel">Username</label>
+                        <input type="text" id="signupUsername" class="auth-input" placeholder="Choose username"
+                            required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="signupPassword" id="signupPasswordLabel">Password</label>
+                        <input type="password" id="signupPassword" class="auth-input" placeholder="Choose password"
+                            required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirmPassword" id="confirmPasswordLabel">Confirm Password</label>
+                        <input type="password" id="confirmPassword" class="auth-input" placeholder="Confirm password"
+                            required>
+                    </div>
+
+                    <div class="privacy-note" id="signupPrivacyNote">
+                        <small>🔒 No data stored. Any credentials work for demo.</small>
+                    </div>
+
+                    <button type="button" class="auth-btn" id="signupBtn">Sign Up</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- DASHBOARD SECTION -->
+        <div id="dashboardSection" class="container hidden">
+            <div class="dashboard-header">
+                <h2 class="section-title"><span id="welcomeBack">Welcome back,</span> <span
+                        id="dashboardUsername">User</span>!</h2>
+                <p class="dashboard-date" id="currentDate"></p>
+            </div>
+
+            <!-- Statistics Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">📊</div>
+                    <div class="stat-content">
+                        <span class="stat-label" id="totalAssessmentsLabel">Total Assessments</span>
+                        <span class="stat-value" id="totalAssessments">0</span>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">📈</div>
+                    <div class="stat-content">
+                        <span class="stat-label" id="avgScoreLabel">Average Score</span>
+                        <span class="stat-value" id="avgScore">0</span>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">🟢</div>
+                    <div class="stat-content">
+                        <span class="stat-label" id="lowRiskLabel">Low Risk</span>
+                        <span class="stat-value" id="lowRiskCount">0</span>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">🟡</div>
+                    <div class="stat-content">
+                        <span class="stat-label" id="moderateRiskLabel">Moderate Risk</span>
+                        <span class="stat-value" id="moderateRiskCount">0</span>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">🔴</div>
+                    <div class="stat-content">
+                        <span class="stat-label" id="highRiskLabel">High Risk</span>
+                        <span class="stat-value" id="highRiskCount">0</span>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">📅</div>
+                    <div class="stat-content">
+                        <span class="stat-label" id="lastAssessmentLabel">Last Assessment</span>
+                        <span class="stat-value" id="lastAssessmentDate">Never</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Progress Chart -->
+            <div class="chart-card">
+                <h3 class="chart-title" id="progressTitle">Your Progress Over Time</h3>
+                <div class="chart-container-large">
+                    <canvas id="assessmentChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="recent-activity-card">
+                <h3 class="chart-title" id="recentTitle">Recent Assessments</h3>
+                <div class="recent-list" id="recentList">
+                    <p class="no-data" id="noAssessments">No assessments yet. Take your first assessment!</p>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <button class="quick-action-btn" onclick="window.openTab('screening')">
+                    <span>📝</span> <span id="newAssessmentBtn">New Assessment</span>
+                </button>
+                <button class="quick-action-btn" onclick="window.openTab('resources')">
+                    <span>📍</span> <span id="findHelpBtn">Find Help</span>
+                </button>
+                <button class="quick-action-btn" onclick="window.openTab('education')">
+                    <span>📚</span> <span id="learnMoreBtn">Learn More</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- SCREENING SECTION -->
+        <div id="screeningSection" class="container hidden">
+            <!-- Privacy Notice -->
+            <div class="privacy-notice">
+                <strong id="privacyTitle">🔒 Your Privacy Matters</strong>
+                <p id="privacyText">This screening is completely anonymous. We don't collect any personal information.
+                    Your responses are confidential and protected under NDPR guidelines.</p>
+            </div>
+
+            <!-- Assessment Type Selection -->
+            <div id="assessmentTypeSelection">
+                <h2 class="section-title" id="feelToday">How are you feeling today?</h2>
+                <p class="section-subtitle" id="chooseTool">Choose a screening tool to check your mental well-being</p>
+
+                <div class="assessment-type-grid">
+                    <div class="assessment-type-card" data-assessment="phq9">
+                        <h3>PHQ-9</h3>
+                        <p id="phq9Desc">Depression screening questionnaire</p>
+                        <span class="assessment-badge" id="phq9Time">9 questions • 3 mins</span>
+                    </div>
+                    <div class="assessment-type-card" data-assessment="gad7">
+                        <h3>GAD-7</h3>
+                        <p id="gad7Desc">Anxiety screening questionnaire</p>
+                        <span class="assessment-badge" id="gad7Time">7 questions • 2 mins</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PHQ-9 Assessment -->
+            <div id="phq9Assessment" class="assessment assessment-card hidden">
+                <div class="progress-container">
+                    <div class="progress-header">
+                        <span id="phq9Counter">Question 1 / 9</span>
+                        <span id="phq9Percent">0%</span>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill" id="phq9Progress" style="width: 0%;"></div>
+                    </div>
+                </div>
+                <div id="phq9QuestionContainer"></div>
+                <div id="phq9BackButton" class="back-button-container"></div>
+            </div>
+
+            <!-- GAD-7 Assessment -->
+            <div id="gad7Assessment" class="assessment assessment-card hidden">
+                <div class="progress-container">
+                    <div class="progress-header">
+                        <span id="gad7Counter">Question 1 / 7</span>
+                        <span id="gad7Percent">0%</span>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill" id="gad7Progress" style="width: 0%;"></div>
+                    </div>
+                </div>
+                <div id="gad7QuestionContainer"></div>
+                <div id="gad7BackButton" class="back-button-container"></div>
+            </div>
+
+            <!-- Loading Screen -->
+            <div id="loadingScreen" class="loading hidden">
+                <div class="loading-container">
+                    <div class="skeleton-grid">
+                        <div class="skeleton-bar">
+                            <div class="skeleton-shine"></div>
+                        </div>
+                        <div class="skeleton-bar">
+                            <div class="skeleton-shine" style="animation-delay: 0.1s;"></div>
+                        </div>
+                        <div class="skeleton-bar">
+                            <div class="skeleton-shine" style="animation-delay: 0.2s;"></div>
+                        </div>
+                    </div>
+                    <p class="loading-text" id="loadingMessage">Calculating your results...</p>
+                </div>
+            </div>
+
+            <!-- Results Display -->
+            <div id="resultsDisplay" class="results hidden"></div>
+        </div>
+
+        <!-- RESOURCES SECTION -->
+        <div id="resourcesSection" class="container hidden">
+            <div class="resource-directory">
+                <h2 class="section-title" id="resourcesTitle">Find Help Near You</h2>
+
+                <div class="filters">
+                    <select class="filter-select" id="stateFilter">
+                        <option value="" id="allStates">All States</option>
+                        <option value="lagos">Lagos</option>
+                        <option value="ogun">Ogun</option>
+                        <option value="abuja">Abuja</option>
+                        <option value="rivers">Rivers</option>
+                        <option value="kaduna">Kaduna</option>
+                        <option value="kano">Kano</option>
+                    </select>
+                    <select class="filter-select" id="serviceFilter">
+                        <option value="" id="allServices">All Services</option>
+                        <option value="crisis" id="crisisHotline">Crisis Hotline</option>
+                        <option value="therapy" id="therapist">Therapist</option>
+                        <option value="support" id="supportGroup">Support Group</option>
+                        <option value="clinic" id="clinic">Mental Health Clinic</option>
+                    </select>
+                </div>
+
+                <div class="resource-grid" id="resourceGrid">
+                    <!-- Lagos -->
+                    <div class="resource-card" data-state="lagos" data-service="crisis">
+                        <div class="resource-name">Lagos State Suicide Prevention Hotline</div>
+                        <span class="resource-type">Crisis Hotline</span>
+                        <div class="resource-contact">📞 0800 111 6264</div>
+                        <div class="resource-phone">24/7 Toll-Free</div>
+                        <div class="resource-location">📍 Lagos State</div>
+                    </div>
+
+                    <div class="resource-card" data-state="lagos" data-service="clinic">
+                        <div class="resource-name">Federal Neuro-Psychiatric Hospital Yaba</div>
+                        <span class="resource-type">Mental Health Clinic</span>
+                        <div class="resource-contact">📞 0802 307 6932</div>
+                        <div class="resource-contact">📧 info@neuroyaba.org.ng</div>
+                        <div class="resource-location">📍 7, Harvey Road, Yaba, Lagos</div>
+                    </div>
+
+                    <div class="resource-card" data-state="lagos" data-service="support">
+                        <div class="resource-name">Mentally Aware Nigeria Initiative (MANI)</div>
+                        <span class="resource-type">Support Group</span>
+                        <div class="resource-contact">📞 0809 111 6264</div>
+                        <div class="resource-contact">📧 info@mentallyaware.org</div>
+                        <div class="resource-location">📍 Lagos (Virtual sessions available)</div>
+                    </div>
+
+                    <div class="resource-card" data-state="abuja" data-service="crisis">
+                        <div class="resource-name">FCT Suicide Prevention Hotline</div>
+                        <span class="resource-type">Crisis Hotline</span>
+                        <div class="resource-contact">📞 0809 777 6264</div>
+                        <div class="resource-phone">24/7 Support</div>
+                        <div class="resource-location">📍 Abuja</div>
+                    </div>
+
+                    <div class="resource-card" data-state="abuja" data-service="clinic">
+                        <div class="resource-name">National Hospital Abuja - Psychiatry Department</div>
+                        <span class="resource-type">Mental Health Clinic</span>
+                        <div class="resource-contact">📞 09 461 0000</div>
+                        <div class="resource-contact">📧 info@nationalhospital.gov.ng</div>
+                        <div class="resource-location">📍 Central Area, Abuja</div>
+                    </div>
+
+                    <div class="resource-card" data-state="ogun" data-service="clinic">
+                        <div class="resource-name">Neuro-Psychiatric Hospital Aro</div>
+                        <span class="resource-type">Mental Health Clinic</span>
+                        <div class="resource-contact">📞 0803 403 3894</div>
+                        <div class="resource-location">📍 Abeokuta, Ogun State</div>
+                    </div>
+
+                    <div class="resource-card" data-state="kano" data-service="clinic">
+                        <div class="resource-name">Federal Neuro-Psychiatric Hospital Kano</div>
+                        <span class="resource-type">Mental Health Clinic</span>
+                        <div class="resource-contact">📞 064 311 062</div>
+                        <div class="resource-location">📍 Kano State</div>
+                    </div>
+
+                    <div class="resource-card" data-state="rivers" data-service="clinic">
+                        <div class="resource-name">Neuro-Psychiatric Hospital Rumuigbo</div>
+                        <span class="resource-type">Mental Health Clinic</span>
+                        <div class="resource-contact">📞 0803 704 9000</div>
+                        <div class="resource-location">📍 Port Harcourt, Rivers State</div>
+                    </div>
+
+                    <div class="resource-card" data-state="kaduna" data-service="clinic">
+                        <div class="resource-name">Federal Neuro-Psychiatric Hospital Kaduna</div>
+                        <span class="resource-type">Mental Health Clinic</span>
+                        <div class="resource-contact">📞 062 200 235</div>
+                        <div class="resource-location">📍 Kaduna State</div>
+                    </div>
+
+                    <div class="resource-card" data-service="crisis">
+                        <div class="resource-name">Sobi FM - Suicide Prevention Helpline</div>
+                        <span class="resource-type">Crisis Hotline</span>
+                        <div class="resource-contact">📞 0800 800 2000</div>
+                        <div class="resource-phone">National Hotline</div>
+                        <div class="resource-location">📍 Nigeria-wide</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- EDUCATION SECTION -->
+        <div id="educationSection" class="container hidden">
+            <div class="education-section">
+                <h2 class="section-title" id="educationTitle">Understanding Mental Health</h2>
+
+                <div class="condition-grid">
+                    <!-- Depression Card -->
+                    <div class="condition-card" onclick="openConditionModal('depression')">
+                        <div class="condition-name" id="depressionTitle">Depression</div>
+                        <div class="condition-desc" id="depressionDesc">
+                            More than just sadness. Depression is a common but serious mood disorder that affects how
+                            you feel, think, and handle daily activities. Symptoms include persistent sadness, loss of
+                            interest in activities, changes in appetite, and difficulty concentrating.
+                        </div>
+                        <div class="learn-more" id="depressionLearn">Learn more →</div>
+                    </div>
+
+                    <!-- Anxiety Card -->
+                    <div class="condition-card" onclick="openConditionModal('anxiety')">
+                        <div class="condition-name" id="anxietyTitle">Anxiety</div>
+                        <div class="condition-desc" id="anxietyDesc">
+                            When worry becomes overwhelming. Anxiety disorders involve excessive fear or worry that
+                            interferes with daily life. This includes generalized anxiety, panic attacks, and social
+                            anxiety. Physical symptoms may include racing heart, sweating, and trembling.
+                        </div>
+                        <div class="learn-more" id="anxietyLearn">Learn more →</div>
+                    </div>
+
+                    <!-- PTSD Card -->
+                    <div class="condition-card" onclick="openConditionModal('ptsd')">
+                        <div class="condition-name" id="ptsdTitle">PTSD</div>
+                        <div class="condition-desc" id="ptsdDesc">
+                            Post-Traumatic Stress Disorder can develop after experiencing a traumatic event. Symptoms
+                            include flashbacks, nightmares, severe anxiety, and uncontrollable thoughts about the event.
+                            It's common in Nigeria due to various forms of trauma.
+                        </div>
+                        <div class="learn-more" id="ptsdLearn">Learn more →</div>
+                    </div>
+
+                    <!-- Bipolar Card -->
+                    <div class="condition-card" onclick="openConditionModal('bipolar')">
+                        <div class="condition-name" id="bipolarTitle">Bipolar Disorder</div>
+                        <div class="condition-desc" id="bipolarDesc">
+                            A condition characterized by extreme mood swings including emotional highs (mania) and lows
+                            (depression). In Nigeria, it's often misdiagnosed or attributed to spiritual causes. Early
+                            recognition is crucial for effective management.
+                        </div>
+                        <div class="learn-more" id="bipolarLearn">Learn more →</div>
+                    </div>
+                </div>
+
+                <!-- When to Seek Help -->
+                <div class="help-section">
+                    <h3 id="seekHelpTitle">When to Seek Help</h3>
+                    <p id="seekHelpDesc">If you've experienced any of these symptoms for more than two weeks, consider
+                        speaking with a mental health professional:</p>
+                    <ul class="symptoms-list">
+                        <li id="symptom1">• Persistent sadness</li>
+                        <li id="symptom2">• Loss of interest</li>
+                        <li id="symptom3">• Sleep changes</li>
+                        <li id="symptom4">• Appetite changes</li>
+                        <li id="symptom5">• Difficulty concentrating</li>
+                        <li id="symptom6">• Thoughts of self-harm</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- CONDITION DETAIL MODAL -->
+        <div class="condition-modal-overlay" id="conditionModal">
+            <div class="condition-modal">
+                <button class="condition-modal-close" onclick="closeConditionModal()">✕</button>
+                <div class="condition-modal-body" id="conditionModalBody"></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- AI Chat Bot -->
+    <button class="chat-button" id="chatButton">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+        </svg>
+    </button>
+
+    <div class="chat-window" id="chatWindow">
+        <div class="chat-header">
+            <div class="chat-avatar">🌿</div>
+            <div>
+                <div class="chat-title">MindWell AI Guide</div>
+                <div class="chat-subtitle" id="chatStatus">Here to listen</div>
+            </div>
+        </div>
+
+        <div class="chat-messages" id="chatMessages">
+            <div class="message bot">
+                <div class="message-bubble" id="welcomeMessage">Hello! I'm here to listen. How are you feeling today?
+                </div>
+            </div>
+        </div>
+
+        <div class="chat-indicator hidden" id="typingIndicator">
+            <span class="chat-dot"></span>
+            <span class="chat-dot" style="animation-delay: 0.2s;"></span>
+            <span class="chat-dot" style="animation-delay: 0.4s;"></span>
+        </div>
+
+        <form class="chat-input-form" id="chatForm">
+            <input type="text" class="chat-input" id="chatInput" placeholder="Share your thoughts...">
+            <button type="submit" class="chat-send" id="chatSend" disabled>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                    <line x1="22" y1="2" x2="11" y2="13" />
+                    <polygon points="22 2 15 22 11 13 2 9 22 2" />
+                </svg>
+            </button>
+        </form>
+    </div>
+
+    <!-- JavaScript - Load in correct order -->
+    <!-- Translations -->
+    <script src="js/translations/en.js"></script>
+    <script src="js/translations/pidgin.js"></script>
+    <script src="js/translations/yoruba.js"></script>
+    <script src="js/translations/igbo.js"></script>
+    <script src="js/translations/hausa.js"></script>
+    <script src="js/translations/index.js"></script>
+
+    <!-- Questions -->
+    <script src="js/questions/phq9.js"></script>
+    <script src="js/questions/gad7.js"></script>
+    <script src="js/questions/options.js"></script>
+
+    <!-- Core Modules -->
+    <script src="js/core/state.js"></script>
+    <script src="js/core/language.js"></script>
+    <script src="js/core/auth.js"></script>
+    <script src="js/core/dashboard.js"></script>
+    <script src="js/core/assessment.js"></script>
+    <script src="js/core/resources.js"></script>
+    <script src="js/core/chat.js?v=2"></script>
+    <script src="js/core/education.js?v=2"></script>
+
+
+    <!-- Main Entry Point -->
+    <script src="js/main.js?v=2"></script>
+</body>
+
+</html>
