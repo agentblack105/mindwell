@@ -1,6 +1,13 @@
-// ─── Backend API Service ──────────────────────────────────────────────────
-const BASE = 'http://localhost:8000/api/v1';
 import { state } from './state.js';
+
+// ─── Backend API Service ──────────────────────────────────────────────────
+function resolveApiBase() {
+    const rawBase = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000').trim();
+    const normalized = rawBase.replace(/\/+$/, '');
+    return normalized.endsWith('/api/v1') ? normalized : `${normalized}/api/v1`;
+}
+
+const BASE = resolveApiBase();
 
 async function request(path, opts = {}) {
     const headers = { 'Content-Type': 'application/json', ...opts.headers };

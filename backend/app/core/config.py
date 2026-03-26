@@ -1,3 +1,6 @@
+import json
+
+from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -6,6 +9,7 @@ class Settings(BaseSettings):
     VERSION: str = "1.0.0"
     API_V1_STR: str = "/api/v1"
     SECRET_KEY: str = ""
+    DATABASE_URL: str = ""
 
     # Database
     POSTGRES_SERVER: str = "localhost"
@@ -16,6 +20,14 @@ class Settings(BaseSettings):
 
     @property
     def SQLALCHEMY_DATABASE_URI(self) -> str:
+        if self.DATABASE_URL:
+            database_url = self.DATABASE_URL
+            if database_url.startswith("postgres://"):
+                database_url = database_url.replace("postgres://", "postgresql://", 1)
+            if database_url.startswith("postgresql://") and "+asyncpg" not in database_url:
+                database_url = database_url.replace("postgresql://", "postgresql+asyncpg://", 1)
+            return database_url
+
         return (
             f"postgresql+asyncpg://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}"
             f"@{self.POSTGRES_SERVER}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
@@ -34,6 +46,20 @@ class Settings(BaseSettings):
 
     # Logging
     LOG_LEVEL: str = "INFO"
+
+    @field_validator("BACKEND_CORS_ORIGINS", mode="before")
+    @classmethod
+    def parse_cors_origins(cls, value):
+        if isinstance(value, list):
+            return value
+        if isinstance(value, str):
+            value = value.strip()
+            if not value:
+                return []
+            if value.startswith("["):
+                return json.loads(value)
+            return [origin.strip() for origin in value.split(",") if origin.strip()]
+        return value
 
     model_config = SettingsConfigDict(case_sensitive=True, env_file=".env")
 

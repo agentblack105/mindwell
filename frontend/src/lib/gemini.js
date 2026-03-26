@@ -1,10 +1,11 @@
 // ─── Gemini AI Service ────────────────────────────────────────────────────
 // Model chain: Gemma 27B (14.4K RPD) → Gemini 2.5 Flash Lite (20 RPD)
-const GEMINI_KEY = 'AIzaSyAh-6OzmqOJ10dT3Vc0CpVuDNWIPjX-eDE';
+const GEMINI_KEY = (import.meta.env.VITE_GEMINI_API_KEY || '').trim();
 const MODELS = [
     { name: 'gemma-3-27b-it', supportsSystem: false },
     { name: 'gemini-2.5-flash-lite', supportsSystem: true },
 ];
+let warnedMissingGeminiKey = false;
 
 const LANG_INSTRUCTIONS = {
     en: 'Respond entirely in clear, simple English.',
@@ -96,6 +97,14 @@ export async function sendToGemini(userMessage, context = {}) {
 }
 
 async function tryModel(model, systemPrompt) {
+    if (!GEMINI_KEY) {
+        if (!warnedMissingGeminiKey) {
+            console.warn('VITE_GEMINI_API_KEY is not set. Falling back to offline chat responses.');
+            warnedMissingGeminiKey = true;
+        }
+        return null;
+    }
+
     try {
         const url = `https://generativelanguage.googleapis.com/v1beta/models/${model.name}:generateContent`;
 

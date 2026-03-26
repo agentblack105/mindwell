@@ -1,0 +1,30 @@
+.DS_Store
+desktop.ini
+.vercel/
+
+# Python
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+**/__pycache__/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Local environments and secrets
+backend/.env
+backend/.venv/
+backend/mental/
+frontend/.env
+frontend/.env.*
+!frontend/.env.example
+
+# Node / frontend build output
+frontend/node_modules/
+frontend/dist/
+frontend/dist-ssr/
+
+# Editors
+.vscode/
+.idea/

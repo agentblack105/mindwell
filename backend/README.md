@@ -105,31 +105,36 @@ PYTHONPATH=. pytest tests/ -v
 
 | Variable | Default | Description |
 |----------|---------|-------------|
+| `DATABASE_URL` | — | Preferred in production. Managed Postgres connection string. Overrides `POSTGRES_*` |
 | `SECRET_KEY` | — | **Required.** JWT signing key + admin password seed |
 | `POSTGRES_SERVER` | `localhost` | DB host |
 | `POSTGRES_DB` | `smartmental` | DB name |
 | `POSTGRES_USER` | `postgres` | DB user |
 | `POSTGRES_PASSWORD` | `postgres` | DB password |
-| `BACKEND_CORS_ORIGINS` | `["http://localhost:3000"]` | JSON list of allowed origins |
+| `BACKEND_CORS_ORIGINS` | `["http://localhost:3000"]` | JSON list or comma-separated list of allowed origins |
 | `SESSION_RETENTION_DAYS` | `90` | NDPR data retention cutoff |
 | `LOG_LEVEL` | `INFO` | Logging verbosity |
 
 ---
 
-## Production Deploy
+## Hosted Deploy
 
 ```bash
-# 1. Set environment
-cp .env.example .env && nano .env
-
-# 2. Obtain TLS certificates (Certbot)
-certbot certonly --standalone -d your-domain.com
-
-# 3. Update docker/nginx.conf with your domain
-
-# 4. Launch
-docker compose -f docker/docker-compose.prod.yml up -d
+# Render / Railway / similar
+cd backend
+cp .env.example .env
+# set SECRET_KEY, DATABASE_URL, BACKEND_CORS_ORIGINS
+alembic upgrade head
+uvicorn app.main:app --host 0.0.0.0 --port 8000
 ```
+
+Recommended setup:
+
+- Frontend on Vercel
+- Backend on Render or another Python host
+- Managed Postgres via `DATABASE_URL`
+
+See the repo-level deployment guide: [`../DEPLOYMENT.md`](../DEPLOYMENT.md)
 
 ---
 
